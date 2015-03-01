@@ -198,6 +198,8 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         && (intent == null || intent.getBooleanExtra(Intents.Scan.SAVE_HISTORY, true));
 
     source = IntentSource.NONE;
+    sourceUrl = null;
+    scanFromWebPageManager = null;
     decodeFormats = null;
     characterSet = null;
 
@@ -294,7 +296,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     ambientLightManager.stop();
     beepManager.close();
     cameraManager.closeDriver();
-    historyManager = null;
+    //historyManager = null; // Keep for onActivityResult
     if (!hasSurface) {
       SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
       SurfaceHolder surfaceHolder = surfaceView.getHolder();
@@ -681,6 +683,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
       if (scanFromWebPageManager != null && scanFromWebPageManager.isScanFromWebPage()) {
         String replyURL = scanFromWebPageManager.buildReplyURL(rawResult, resultHandler);
+        scanFromWebPageManager = null;
         sendReplyMessage(R.id.launch_product_query, replyURL, resultDurationMS);
       }
       
